@@ -13,9 +13,10 @@
 
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
+    "noImplicitAny": false,
 
     "paths": {
-      "~/": "./src/"
+      "~/": [ "./src/" ]
     }
   },
   "exclude": ["build", "node_modules"]

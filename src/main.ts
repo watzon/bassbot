@@ -1,14 +1,14 @@
-import 'reflect-metadata'
+import "reflect-metadata";
 
-import { dirname, importx } from '@discordx/importer'
-import type { Interaction, Message, PresenceStatusData } from 'discord.js'
-import { IntentsBitField, Partials } from 'discord.js'
-import { Client } from 'discordx'
+import { dirname, importx } from "@discordx/importer";
+import type { Interaction, Message } from "discord.js";
+import { IntentsBitField, Partials } from "discord.js";
+import { Client } from "discordx";
+import * as dotenv from "dotenv";
 
-import * as dotenv from 'dotenv'
-dotenv.config()
+import { generateInviteLink } from "./utils";
 
-import { generateInviteLink } from './utils'
+dotenv.config();
 
 export const bot = new Client({
   // To only use global commands (use @Guild for specific guild command), comment this line
@@ -36,16 +36,16 @@ export const bot = new Client({
 
   // Configuration for @SimpleCommand
   simpleCommand: {
-    prefix: '!',
+    prefix: "!",
   },
-})
+});
 
-bot.once('ready', async () => {
+bot.once("ready", async () => {
   // Make sure all guilds are cached
-  await bot.guilds.fetch()
+  await bot.guilds.fetch();
 
   // Synchronize applications commands with Discord
-  await bot.initApplicationCommands()
+  await bot.initApplicationCommands();
 
   // To clear all guild commands, uncomment this line,
   // This is useful when moving from guild commands to global commands
@@ -55,42 +55,42 @@ bot.once('ready', async () => {
   //    ...bot.guilds.cache.map((g) => g.id)
   //  )
 
-  console.log('Bot started')
+  console.log("Bot started");
 
-  const inviteLink = generateInviteLink()
+  const inviteLink = generateInviteLink();
   if (inviteLink) {
-    console.log('Invite the bot to your server with the following link')
-    console.log(inviteLink)
+    console.log("Invite the bot to your server with the following link");
+    console.log(inviteLink);
   }
 
   // set bot activity
   if (bot.user) {
-    const activity = process.env.BOT_ACTIVITY
+    const activity = process.env.BOT_ACTIVITY;
     if (activity) {
-      bot.user.setActivity(activity)
+      bot.user.setActivity(activity);
     }
   }
-})
+});
 
-bot.on('interactionCreate', (interaction: Interaction) => {
-  bot.executeInteraction(interaction)
-})
+bot.on("interactionCreate", (interaction: Interaction) => {
+  bot.executeInteraction(interaction);
+});
 
-bot.on('messageCreate', (message: Message) => {
-  bot.executeCommand(message)
-})
+bot.on("messageCreate", (message: Message) => {
+  bot.executeCommand(message);
+});
 
 async function run() {
   // Import commands/events
-  await importx(dirname(import.meta.url) + '/{events,commands}/**/*.cmd.{ts,js}')
+  await importx(dirname(import.meta.url) + "/{events,commands}/**/*.cmd.{ts,js}");
 
   // Let's start the bot
   if (!process.env.BOT_TOKEN) {
-    throw Error('Could not find BOT_TOKEN in your environment')
+    throw Error("Could not find BOT_TOKEN in your environment");
   }
 
   // Log in with your bot token
-  await bot.login(process.env.BOT_TOKEN)
+  await bot.login(process.env.BOT_TOKEN);
 }
 
-run()
+run();
